@@ -28,7 +28,7 @@ function Details() {
   const [mail, setMail] = useState("");
   const [phone, setPhone] = useState("");
   const [age, setAge] = useState("");
-  const [gender, setGender] = useState("");
+
   const [qualification, setqualification] = useState("");
   const [qualificationError, setqualificationError] = useState("");
   const [fnameError, setFnameError] = useState("");
@@ -36,7 +36,8 @@ function Details() {
   const [mnameError, setMnameError] = useState("");
   const [mailError, setMailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
-
+  const [updateBtn, setUpdateBtn] = useState(false);
+  const [detailsID, setdetailsID] = useState();
   const [getData, setGetData] = useState([]);
 
   const options = [
@@ -60,7 +61,26 @@ function Details() {
     setMnameError("");
     setMailError("");
     setPhoneError("");
-    // setLnameError("")
+    setUpdateBtn(false);
+  };
+  const formatDate = (inputDate) => {
+    const date = new Date(inputDate);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  const dataUpdate = (data) => {
+    console.log("datadata....", data);
+    setFname(data.FName);
+    setLname(data.LName);
+    const formattedDate = formatDate(data.dof);
+    setDate(formattedDate);
+    setFaname(data.FatherName);
+    setMname(data.MotherName);
+    setPhone(data.PhoneNumber);
+    setMail(data.Email);
+    setqualification(data.qualification);
   };
 
   const columns = [
@@ -248,6 +268,7 @@ function Details() {
           Email: x.mail,
           PhoneNumber: x.phone,
           qualification: x.qualification,
+          dof: x.date,
         };
       });
 
@@ -290,14 +311,14 @@ function Details() {
 
   const DetailsUpdate = async (detailsID) => {
     const data = {
-      fname,
-      lname,
-      Faname,
-      mname,
-      date,
-      mail,
-      phone,
-      qualification,
+      fname: fname,
+      lname: lname,
+      Faname: Faname,
+      mname: mname,
+      date: date,
+      mail: mail,
+      phone: phone,
+      qualification: qualification,
     };
 
     try {
@@ -341,6 +362,7 @@ function Details() {
           <CForm className="">
             <CRow>
               <CCol sm={8}>
+                {/* {JSON.stringify(date)} */}
                 <CFormLabel className="mt-2">
                   First Name <code>*</code>
                 </CFormLabel>
@@ -513,30 +535,56 @@ function Details() {
                 <span className="errorMsg">{phoneError}</span>
               </CCol>
             </CRow>
+            {updateBtn ? (
+              <CButton
+                onClick={() => DetailsUpdate(detailsID)}
+                className="mt-4 mx-2"
+                color="success"
+                variant="outline"
+                disabled={
+                  !fname ||
+                  !lname ||
+                  !Faname ||
+                  !mname ||
+                  !date ||
+                  !mail ||
+                  !phone ||
+                  !qualification ||
+                  FanameError ||
+                  mnameError ||
+                  fnameError ||
+                  mailError ||
+                  phoneError
+                }
+              >
+                Update
+              </CButton>
+            ) : (
+              <CButton
+                onClick={() => SaveDetails()}
+                className="mt-4 mx-2"
+                color="success"
+                variant="outline"
+                disabled={
+                  !fname ||
+                  !lname ||
+                  !Faname ||
+                  !mname ||
+                  !date ||
+                  !mail ||
+                  !phone ||
+                  !qualification ||
+                  FanameError ||
+                  mnameError ||
+                  fnameError ||
+                  mailError ||
+                  phoneError
+                }
+              >
+                Save
+              </CButton>
+            )}
 
-            <CButton
-              onClick={() => SaveDetails()}
-              className="mt-4 mx-2"
-              color="success"
-              variant="outline"
-              disabled={
-                !fname ||
-                !lname ||
-                !Faname ||
-                !mname ||
-                !date ||
-                !mail ||
-                !phone ||
-                !qualification ||
-                FanameError ||
-                mnameError ||
-                fnameError ||
-                mailError ||
-                phoneError
-              }
-            >
-              Save
-            </CButton>
             <CButton
               onClick={() => clearFuntion()}
               className="mt-4 mx-2"
@@ -565,7 +613,9 @@ function Details() {
                         <button
                           className="updateBtn"
                           onClick={() => {
-                            DetailsUpdate(item.DetailsID);
+                            setdetailsID(item.DetailsID);
+                            dataUpdate(item);
+                            setUpdateBtn(true);
                           }}
                         >
                           <FaEdit
