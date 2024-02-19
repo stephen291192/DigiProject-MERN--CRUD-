@@ -322,7 +322,7 @@ function Details() {
     };
 
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         `http://localhost:3001/api/detailsUpdate/${detailsID}`,
         data
       );
