@@ -20,6 +20,7 @@
 
 ![image](https://github.com/stephen291192/DigiProject-MERN--CRUD-/assets/65404247/8a8ea039-4095-4c96-9627-c292590524f9)
 
+![update](https://github.com/stephen291192/DigiProject-MERN--CRUD-/assets/65404247/17f1cc9d-7348-4ece-bdaa-4dbe1da444d1)
 
 
 
