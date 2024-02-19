@@ -57,12 +57,10 @@ app.post("/api/save", async (req, res) => {
     const existingEntry = await details.findOne({ fname, phone, mail });
 
     if (existingEntry) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Duplicate entry. First name and email, phone number must be unique.",
-        });
+      return res.status(400).json({
+        error:
+          "Duplicate entry. First name and email, phone number must be unique.",
+      });
     }
     if (existingEntry || fname.length < 3) {
       return res
@@ -70,11 +68,9 @@ app.post("/api/save", async (req, res) => {
         .json({ error: "The First name must be at least 3 characters long." });
     }
     if (existingEntry || phone.length === 9) {
-      return res
-        .status(400)
-        .json({
-          error: "The phone number must be at least 10 characters long.",
-        });
+      return res.status(400).json({
+        error: "The phone number must be at least 10 characters long.",
+      });
     }
     const data = new details({
       fname,
@@ -117,16 +113,47 @@ app.get("/api/GetDetails", async (req, res) => {
 // Update API Function
 app.put("/api/detailsUpdate/:id", async (req, res) => {
   const detailsID = req.params.id;
-  const { completed } = req.body;
+  const { fname, lname, Faname, mname, date, mail, phone, qualification } =
+    req.body;
+
+  // Validate required fields
+  if (
+    !fname ||
+    !lname ||
+    !Faname ||
+    !mname ||
+    !date ||
+    !mail ||
+    !phone ||
+    !qualification
+  ) {
+    return res.status(400).json({ error: "All fields are required." });
+  }
+
   try {
+    const parsedDate = new Date(date);
     const updatedDetails = await details.findByIdAndUpdate(
       detailsID,
-      { completed },
+      {
+        fname,
+        lname,
+        Faname,
+        mname,
+        date: parsedDate,
+        mail,
+        phone,
+        qualification,
+      },
       { new: true }
     );
+
+    if (!updatedDetails) {
+      return res.status(404).json({ error: "Details not found" });
+    }
+
     res.json({ details: updatedDetails });
   } catch (error) {
-    console.error("Error updating task:", error);
+    console.error("Error updating details:", error);
     res.status(500).send("Internal Server Error");
   }
 });
