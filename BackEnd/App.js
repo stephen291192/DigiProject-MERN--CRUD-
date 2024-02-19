@@ -38,68 +38,81 @@ database.on("error", (error) => {
 // Database Connection - End ----
 
 const details = mongoose.model("details", {
-     fname: String ,lname: String ,Faname: String ,
-     mname: String ,date: Date ,mail: String ,phone:Number,qualification:String
+  fname: String,
+  lname: String,
+  Faname: String,
+  mname: String,
+  date: Date,
+  mail: String,
+  phone: Number,
+  qualification: String,
 });
-
 
 // Save API function
 app.post("/api/save", async (req, res) => {
-  const { fname, lname, Faname, mname, date, mail, phone, qualification } = req.body;
+  const { fname, lname, Faname, mname, date, mail, phone, qualification } =
+    req.body;
 
   try {
-      
-      const existingEntry = await details.findOne({ fname, phone,mail });
+    const existingEntry = await details.findOne({ fname, phone, mail });
 
-      if (existingEntry) {
-          return res.status(400).json({ error: "Duplicate entry. First name and email, phone number must be unique." });
-      }
-      if (existingEntry || fname.length < 3) {
-        return res.status(400).json({ error: "The First name must be at least 3 characters long." });
+    if (existingEntry) {
+      return res
+        .status(400)
+        .json({
+          error:
+            "Duplicate entry. First name and email, phone number must be unique.",
+        });
+    }
+    if (existingEntry || fname.length < 3) {
+      return res
+        .status(400)
+        .json({ error: "The First name must be at least 3 characters long." });
     }
     if (existingEntry || phone.length === 9) {
-      return res.status(400).json({ error: "The phone number must be at least 10 characters long." });
-  }
-      const data = new details({
-          fname,
-          lname,
-          Faname,
-          mname,
-          date,
-          mail,
-          phone,
-          qualification,
-      });
+      return res
+        .status(400)
+        .json({
+          error: "The phone number must be at least 10 characters long.",
+        });
+    }
+    const data = new details({
+      fname,
+      lname,
+      Faname,
+      mname,
+      date,
+      mail,
+      phone,
+      qualification,
+    });
 
-      await data.save();
+    await data.save();
 
-      res.status(200 || 201).json({ message: "Details saved successfully" });
+    res.status(200 || 201).json({ message: "Details saved successfully" });
   } catch (error) {
-      console.error("Error saving details:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error saving details:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
- 
 // Get All Data API Function
 app.get("/api/GetDetails", async (req, res) => {
   try {
-      // Replace 'Details' with your actual model
-      const detailsvalue = await details.find();
+    // Replace 'Details' with your actual model
+    const detailsvalue = await details.find();
 
-      if (detailsvalue.length === 0) {
-          // If no details are found, send a 404 response
-          res.status(404).json({ message: "No details found" });
-      } else {
-          res.json({ detailsvalue });
-      }
+    if (detailsvalue.length === 0) {
+      // If no details are found, send a 404 response
+      res.status(404).json({ message: "No details found" });
+    } else {
+      res.json({ detailsvalue });
+    }
   } catch (error) {
-      console.error("Error fetching details:", error);
-      res.status(500).send("Internal Server Error");
+    console.error("Error fetching details:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
-
-
 
 // Update API Function
 app.put("/api/detailsUpdate/:id", async (req, res) => {
@@ -117,8 +130,6 @@ app.put("/api/detailsUpdate/:id", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
-
 
 // Delect API Function
 app.delete("/api/detailsdelete/:id", async (req, res) => {
