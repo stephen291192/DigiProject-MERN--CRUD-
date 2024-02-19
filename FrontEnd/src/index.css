@@ -13,11 +13,15 @@ code {
 }
 button.btn.btn-outline-success.disabled.mt-4.mx-2 {
   background-color: rgb(219 219 219);
+  /* cursor: not-allowed !important; */
+}
+.btn.disabled{
+  /* cursor: not-allowed !important; */
 }
 .tableWidth {
-  width: 90%;
+  width: 100%;
   /* margin: 10px; */
-  /* padding: 10px; */
+  padding: 15px;
 }
 button.updateBtn {
   background: none;
@@ -26,4 +30,42 @@ button.updateBtn {
 button.deleteBtn {
   background: none;
   border: 0;
+}
+.errorMsg{
+  color: red;
+  font-size: 12px;
+}
+label {
+  display: inline-block;
+  font-size: 14px;
+  
+}
+.btn{
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+.form-label {
+  margin-bottom:0px !important;
+}
+::placeholder{
+  font-size: 12px;
+}
+.form-control:focus {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+  border-color: #002663 !important ;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(13,110,253,0) !important;
+}
+.form-control {
+   font-size: 14px !important;
+  }
+  td {
+    font-size: 14px;
+}
+.active>.page-link, .page-link.active {
+  z-index: 3;
+  color: var(--bs-pagination-active-color);
+  background-color: #002663 !important;
+  border-color: #002663 !important;
 }
